@@ -6,7 +6,7 @@ import type { TProjectStore } from '../types/projects';
 
 export const useProjectStore = create<TProjectStore>()(
   devtools(
-    (set, get) => ({
+    (set) => ({
       isLoading: true,
       projects,
       updateProject(project) {
@@ -18,9 +18,6 @@ export const useProjectStore = create<TProjectStore>()(
             return item;
           }),
         }));
-      },
-      favoriteProjects: () => {
-        return get().projects.filter((item) => item.isFavorited);
       },
     }),
     { name: 'projects' },

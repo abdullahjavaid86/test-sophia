@@ -12,7 +12,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 export const SideBar: FC<{ collapsed: boolean }> = ({ collapsed }) => {
   const navigate = useNavigate();
-  const { favoriteProjects } = useProjectStore();
+  const favProjects = useProjectStore().projects.filter((item) => item.isFavorite);
 
   const onMenuClick: MenuProps['onClick'] = (e) => {
     if (e.key) {
@@ -28,18 +28,18 @@ export const SideBar: FC<{ collapsed: boolean }> = ({ collapsed }) => {
         title: 'Favorite Projects',
         onClick: onMenuClick,
         label: 'Favorite Projects',
-        children: favoriteProjects().map(({ id, name }) => ({
+        children: favProjects.map(({ id, name }) => ({
           key: id,
           label: name,
           title: Project.ProjectDetails,
         })),
       },
     ],
-    [favoriteProjects],
+    [favProjects],
   );
   return (
     <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
-      <div className="p-5 text-dark text-center text-lg">LOGO</div>
+      <div className="p-5 text-lg text-center text-dark">LOGO</div>
       <Menu theme="light" mode="inline" defaultSelectedKeys={[routePaths.home]} items={menu} />
     </Sider>
   );

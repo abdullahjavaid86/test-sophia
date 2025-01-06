@@ -4,7 +4,6 @@ export type TProjectStore = {
   isLoading: boolean;
   projects: IProject[];
   updateProject: (project: IProject) => void;
-  favoriteProjects: () => IProject[];
 };
 
 export interface IProject {
@@ -13,5 +12,6 @@ export interface IProject {
   start_date?: string;
   end_date?: string;
   project_manager: TUser;
-  isFavorited?: boolean;
+  isFavorite?: boolean;
+  description?: string;
 }

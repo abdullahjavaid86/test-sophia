@@ -1,10 +1,12 @@
 import { Table } from 'antd';
-import { useProjectStore } from '../../store/project';
 import uniqueId from 'lodash.uniqueid';
 import { IProject } from '../../types/projects';
 import { ColumnsType } from 'antd/es/table';
 import { Link } from 'react-router-dom';
 import { routePaths } from '../../constants/paths';
+import { useQuery } from '@tanstack/react-query';
+import { getAllProjects } from '../../services/projects';
+import { useProjectStore } from '../../store/project';
 
 const columns: ColumnsType<IProject> = [
   {
@@ -24,7 +26,7 @@ const columns: ColumnsType<IProject> = [
   },
   {
     title: 'End Date',
-    dataIndex: 'end_data',
+    dataIndex: 'end_date',
     key: uniqueId(),
   },
   {
@@ -34,10 +36,10 @@ const columns: ColumnsType<IProject> = [
     render: (_, record) => record.project_manager?.name,
   },
   {
-    title: 'Actions',
+    title: '',
     key: uniqueId(),
     render: (_, record) => (
-      <Link to={routePaths.projectsDetails.replace(':id', record.id as string)} className="bg-blue text-white p-2">
+      <Link to={routePaths.projectsDetails.replace(':id', record.id as string)} className="p-2 text-white bg-blue">
         Edit
       </Link>
     ),
@@ -45,7 +47,18 @@ const columns: ColumnsType<IProject> = [
 ];
 
 export const Projects = () => {
+  const { isLoading } = useQuery({ queryKey: ['projects', 'list'], queryFn: getAllProjects });
   const { projects } = useProjectStore();
 
-  return <Table dataSource={projects} columns={columns} />;
+  return (
+    <Table
+      dataSource={projects}
+      columns={columns}
+      loading={isLoading}
+      rowKey={'id'}
+      style={{
+        overflow: 'auto',
+      }}
+    />
+  );
 };
