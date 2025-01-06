@@ -7,7 +7,8 @@ export type TUserStore = {
 };
 
 export type TUser = {
+  id: number | string;
   name: string;
   email: string;
-  token: string;
+  token?: string;
 };

@@ -1,3 +1,5 @@
 export const routePaths = {
-  Home: '/',
+  home: '/',
+  projects: '/projects',
+  projectsDetails: '/projects/:id',
 } as const;

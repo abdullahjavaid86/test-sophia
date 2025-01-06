@@ -16,7 +16,7 @@ export const useUserStore = create<TUserStore>()(
           set(() => ({ isLoggedIn: status }));
         },
       }),
-      { name: 'settings' },
+      { name: 'user' },
     ),
   ),
 );

@@ -4,9 +4,7 @@ import { BaseModalBackground, ModalProvider } from 'styled-react-modal';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 
 import { AppRoutes } from './routes/routes';
-import { Content } from './layouts/content';
-import { Footer } from './layouts/footer';
-import { Header } from './layouts/header';
+import Content from './layouts/content';
 import { useThemeChooser } from './contexts/theme-chooser';
 
 export const GlobalStyles = createGlobalStyle`
@@ -30,11 +28,9 @@ function App() {
     <ThemeProvider theme={themeConfig}>
       <ModalProvider backgroundComponent={FadingBackground}>
         <GlobalStyles />
-        <Header />
         <Content>
           <AppRoutes />
         </Content>
-        <Footer />
       </ModalProvider>
     </ThemeProvider>
   );

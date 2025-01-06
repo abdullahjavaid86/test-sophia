@@ -1,6 +1,6 @@
-import { ModalComponent } from '../components/shared/modal';
 import styled from 'styled-components';
-import { useToggle } from '../hooks/useToggle';
+import { Link } from 'react-router-dom';
+import { routePaths } from '../constants/paths';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -14,23 +14,12 @@ const StyledDiv = styled.div`
 `;
 
 export const Home = () => {
-  const { status, toggle, off } = useToggle();
   return (
     <div className="text-center">
       <StyledDiv>
         <p>Welcome home</p>
-        <button className="p-2 bg-transparent border" onClick={toggle}>
-          Open Modal
-        </button>
       </StyledDiv>
-      <ModalComponent isOpen={status} toggle={toggle}>
-        <div className="flex flex-col w-100">
-          <button className="text-right transition-colors hover:text-red-500" onClick={off}>
-            x
-          </button>
-          <p>This is Modal</p>
-        </div>
-      </ModalComponent>
+      <Link to={routePaths.projects}>Go to Projects</Link>
     </div>
   );
 };
