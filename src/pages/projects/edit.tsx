@@ -1,5 +1,5 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { Button, Checkbox, DatePicker, Form, Input, Select } from 'antd';
+import { LoadingOutlined, StarFilled } from '@ant-design/icons';
+import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getSingleProjects } from '../../services/projects';
@@ -8,6 +8,8 @@ import { useProjectStore } from '../../store/project';
 import { routePaths } from '../../constants/paths';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useForm } from 'antd/es/form/Form';
+import { useEffect, useState } from 'react';
 
 dayjs.extend(customParseFormat);
 
@@ -21,6 +23,24 @@ export const ProjectEdit = () => {
     queryKey: ['project', id],
     queryFn: () => getSingleProjects(id),
   });
+  const [isFavorite, setIsFavorite] = useState(data?.isFavorite)
+
+  const [form] = useForm();
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      form.setFieldsValue({
+        id,
+        name: data?.name,
+        description: data?.description,
+        start_date: data?.start_date ? dayjs(data.start_date, 'YYYY-MM-DD') : '',
+        end_date: data?.end_date ? dayjs(data.end_date, 'YYYY-MM-DD') : '',
+        manager_id: data?.project_manager?.id,
+        isFavorite: data?.isFavorite,
+      });
+      setIsFavorite(data?.isFavorite);
+    }
+  }, [id, isLoading, data]);
 
   if (isLoading) {
     return <LoadingOutlined />;
@@ -41,6 +61,7 @@ export const ProjectEdit = () => {
       start_date: val?.start_date ? dayjs(val.start_date).format('YYYY-MM-DD') : '',
       end_date: val?.end_date ? dayjs(val.end_date).format('YYYY-MM-DD') : '',
       project_manager: user,
+      isFavorite
     };
     // TODO: implement api
     // await updateProject(id, payload);
@@ -53,6 +74,7 @@ export const ProjectEdit = () => {
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
+      form={form}
       // style={{ maxWidth: 600 }{}
       initialValues={{
         id,
@@ -65,6 +87,20 @@ export const ProjectEdit = () => {
       }}
       onFinish={onSubmit}
     >
+      <StarFilled
+        style={{
+          color: isFavorite ? '#e40098' : '',
+          fontSize: 24,
+          float: "right"
+        }}
+        onClick={() => {
+          setIsFavorite(prev => {
+            form.setFieldValue('isFavorite', !prev);
+            return !prev;
+          });
+          ;
+        }}
+      />
       <Form.Item label="Project ID">
         <Input disabled value={id} />
       </Form.Item>
@@ -90,13 +126,18 @@ export const ProjectEdit = () => {
           ))}
         </Select>
       </Form.Item>
-
-      <Form.Item label="isFavorite" name="isFavorite" valuePropName="checked">
-        <Checkbox defaultChecked={data?.isFavorite} />
-      </Form.Item>
-      <Button htmlType="submit" className="text-white bg-blue">
-        Submit
-      </Button>
+      <Row>
+        <Col span={2}>
+          <Button htmlType="button" className="text-white bg-blue" onClick={() => navigate(routePaths.projects)}>
+            Back
+          </Button>
+        </Col>
+        <Col span={2}>
+          <Button htmlType="submit" className="text-white bg-blue">
+            Submit
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };
