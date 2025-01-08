@@ -4,6 +4,7 @@ export type TProjectStore = {
   isLoading: boolean;
   projects: IProject[];
   updateProject: (project: IProject) => void;
+  addProject: (project: IProject) => void;
 };
 
 export interface IProject {

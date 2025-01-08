@@ -1,4 +1,5 @@
 import { projects } from '../data/projects';
+import { useProjectStore } from '../store/project';
 import { IProject } from '../types/projects';
 import { api } from './api';
 
@@ -21,9 +22,9 @@ export const getSingleProjects = async (id: string): Promise<IProject> => {
   try {
     await api.get(`/projects/${id}`);
     // TODO: replace with res.data from api
-    return projects.find((project) => project.id === id)!; // mock response
+    return useProjectStore.getState().projects.find((project) => project.id === id)!; // mock response
   } catch (_) {
-    return projects.find((project) => project.id === id)!;
+    return useProjectStore.getState().projects.find((project) => project.id === id)!;
   }
 };
 
@@ -31,9 +32,9 @@ export const updateProject = async (id: string, data: IProject): Promise<IProjec
   try {
     await api.put(`/projects/${id}`, data);
     // TODO: replace with res.data from api
-    return projects.find((project) => project.id === id)!; // mock response
+    return useProjectStore.getState().projects.find((project) => project.id === id)!; // mock response
   } catch (_err) {
-    return projects.find((project) => project.id === id)!;
+    return useProjectStore.getState().projects.find((project) => project.id === id)!;
   }
 };
 
@@ -50,8 +51,8 @@ export const markAsFavorite = async (id: string): Promise<IProject> => {
   try {
     await api.patch(`/projects/mark-as-favorite/${id}`);
     // TODO: replace with res.data from api
-    return projects.find((p) => p.id === id)!;
+    return useProjectStore.getState().projects.find((p) => p.id === id)!;
   } catch (_err) {
-    return projects.find((p) => p.id === id)!;
+    return useProjectStore.getState().projects.find((p) => p.id === id)!;
   }
 };

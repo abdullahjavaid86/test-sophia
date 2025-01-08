@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Button, Col, Row, Table } from 'antd';
 import uniqueId from 'lodash.uniqueid';
 import { IProject } from '../../types/projects';
 import { ColumnsType } from 'antd/es/table';
@@ -7,6 +7,7 @@ import { routePaths } from '../../constants/paths';
 import { useQuery } from '@tanstack/react-query';
 import { getAllProjects } from '../../services/projects';
 import { useProjectStore } from '../../store/project';
+import { StyledAntDButton } from '../../components/styled/StyledButton';
 
 const columns: ColumnsType<IProject> = [
   {
@@ -51,14 +52,25 @@ export const Projects = () => {
   const { projects } = useProjectStore();
 
   return (
-    <Table
-      dataSource={projects}
-      columns={columns}
-      loading={isLoading}
-      rowKey={'id'}
-      style={{
-        overflow: 'auto',
-      }}
-    />
+    <Row>
+      <Col span={2} offset={22} style={{
+        marginBottom: 16
+      }}>
+        <Link to={routePaths.createProjects}>
+          <StyledAntDButton type="default">Create</StyledAntDButton>
+        </Link>
+      </Col>
+      <Col span={24}>
+        <Table
+          dataSource={projects}
+          columns={columns}
+          loading={isLoading}
+          rowKey={'id'}
+          style={{
+            overflow: 'auto',
+          }}
+        />
+      </Col>
+    </Row>
   );
 };

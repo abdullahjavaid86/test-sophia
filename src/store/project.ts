@@ -19,6 +19,11 @@ export const useProjectStore = create<TProjectStore>()(
           }),
         }));
       },
+      addProject(project) {
+        set((state) => ({
+          projects: [...state.projects, project],
+        }));
+      },
     }),
     { name: 'projects' },
   ),
