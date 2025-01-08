@@ -3,7 +3,7 @@ import { TUser } from './user';
 export type TProjectStore = {
   isLoading: boolean;
   projects: IProject[];
-  updateProject: (project: IProject) => void;
+  updateProject: (project: Partial<IProject>) => void;
   addProject: (project: IProject) => void;
 };
 

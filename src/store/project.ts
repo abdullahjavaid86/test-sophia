@@ -13,7 +13,7 @@ export const useProjectStore = create<TProjectStore>()(
         set((state) => ({
           projects: state.projects.map((item) => {
             if (item.id === project.id) {
-              return project;
+              return { ...item, ...project };
             }
             return item;
           }),
