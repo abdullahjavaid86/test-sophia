@@ -1,8 +1,6 @@
-import { LoadingOutlined, StarFilled } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getSingleProjects } from '../../services/projects';
+import { ArrowLeftOutlined, LoadingOutlined, SaveOutlined, StarFilled } from '@ant-design/icons';
+import { Col, DatePicker, Form, Input, Row, Select } from 'antd';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { UserData } from '../../data/user';
 import { useProjectStore } from '../../store/project';
 import { routePaths } from '../../constants/paths';
@@ -10,6 +8,8 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useForm } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
+import { useGetSingleProjectQuery } from '../../hooks/queries/useGetSingleProjectQuery';
+import { StyledAntDButton } from '../../components/styled/styled-button';
 
 dayjs.extend(customParseFormat);
 
@@ -19,11 +19,8 @@ export const ProjectEdit = () => {
   const { id } = useParams() as { id: string };
   const navigate = useNavigate();
   const { updateProject: updateProjectInStore } = useProjectStore();
-  const { isLoading, data } = useQuery({
-    queryKey: ['project', id],
-    queryFn: () => getSingleProjects(id),
-  });
-  const [isFavorite, setIsFavorite] = useState(data?.isFavorite)
+  const { isLoading, data } = useGetSingleProjectQuery();
+  const [isFavorite, setIsFavorite] = useState(data?.isFavorite);
 
   const [form] = useForm();
 
@@ -61,12 +58,12 @@ export const ProjectEdit = () => {
       start_date: val?.start_date ? dayjs(val.start_date).format('YYYY-MM-DD') : '',
       end_date: val?.end_date ? dayjs(val.end_date).format('YYYY-MM-DD') : '',
       project_manager: user,
-      isFavorite
+      isFavorite,
     };
     // TODO: implement api
     // await updateProject(id, payload);
     updateProjectInStore(payload);
-    navigate(routePaths.projects);
+    navigate(routePaths.projectsDetails.replace(':id', id));
   };
 
   return (
@@ -91,14 +88,13 @@ export const ProjectEdit = () => {
         style={{
           color: isFavorite ? '#e40098' : '',
           fontSize: 24,
-          float: "right"
+          float: 'right',
         }}
         onClick={() => {
-          setIsFavorite(prev => {
+          setIsFavorite((prev) => {
             form.setFieldValue('isFavorite', !prev);
             return !prev;
           });
-          ;
         }}
       />
       <Form.Item label="Project ID">
@@ -107,7 +103,6 @@ export const ProjectEdit = () => {
       <Form.Item label="Project Name" name="name" required rules={[{ required: true, min: 3 }]}>
         <Input required />
       </Form.Item>
-
       <Form.Item label="Description" name="description">
         <TextArea rows={4} />
       </Form.Item>
@@ -126,16 +121,18 @@ export const ProjectEdit = () => {
           ))}
         </Select>
       </Form.Item>
-      <Row>
-        <Col span={2}>
-          <Button htmlType="button" className="text-white bg-blue" onClick={() => navigate(routePaths.projects)}>
-            Back
-          </Button>
+      <Row className="mt-14">
+        <Col span={2} offset={2}>
+          <Link to={routePaths.projects}>
+            <StyledAntDButton htmlType="button" icon={<ArrowLeftOutlined />}>
+              Cancel
+            </StyledAntDButton>
+          </Link>
         </Col>
         <Col span={2}>
-          <Button htmlType="submit" className="text-white bg-blue">
+          <StyledAntDButton htmlType="submit" icon={<SaveOutlined />}>
             Submit
-          </Button>
+          </StyledAntDButton>
         </Col>
       </Row>
     </Form>

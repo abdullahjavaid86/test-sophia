@@ -1,15 +1,15 @@
-import { Button, Col, Row, Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import uniqueId from 'lodash.uniqueid';
 import { IProject } from '../../types/projects';
 import { ColumnsType } from 'antd/es/table';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { routePaths } from '../../constants/paths';
 import { useQuery } from '@tanstack/react-query';
 import { getAllProjects } from '../../services/projects';
 import { useProjectStore } from '../../store/project';
 import { StyledAntDButton } from '../../components/styled/styled-button';
 import styled from 'styled-components';
-import { StarFilled } from '@ant-design/icons';
+import { EditOutlined, StarFilled } from '@ant-design/icons';
 
 const StyledAction = styled.div({
   display: 'flex',
@@ -19,6 +19,7 @@ const StyledAction = styled.div({
 export const Projects = () => {
   const { isLoading } = useQuery({ queryKey: ['projects', 'list'], queryFn: getAllProjects });
   const { projects } = useProjectStore();
+  const navigate = useNavigate();
 
   const columns: ColumnsType<IProject> = [
     {
@@ -57,12 +58,19 @@ export const Projects = () => {
               fontSize: 24,
               color: record.isFavorite ? '#e40098' : '',
             }}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               useProjectStore.getState().updateProject({ id: record.id, isFavorite: !record.isFavorite });
             }}
           />
-          <Link to={routePaths.projectsDetails.replace(':id', record.id as string)} className="p-2 text-white bg-blue">
-            Edit
+          <Link
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            to={routePaths.projectsEdit.replace(':id', record.id as string)}
+            className="p-2 text-white bg-blue rounded-md px-4"
+          >
+            <EditOutlined className="mr-1" /> Edit
           </Link>
         </StyledAction>
       ),
@@ -79,7 +87,7 @@ export const Projects = () => {
         }}
       >
         <Link to={routePaths.createProjects}>
-          <StyledAntDButton type="default">Create</StyledAntDButton>
+          <StyledAntDButton type="default">Create Project</StyledAntDButton>
         </Link>
       </Col>
       <Col span={24}>
@@ -90,6 +98,13 @@ export const Projects = () => {
           rowKey={'id'}
           style={{
             overflow: 'auto',
+          }}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                navigate(routePaths.projectsDetails.replace(':id', record.id.toString()));
+              },
+            };
           }}
         />
       </Col>

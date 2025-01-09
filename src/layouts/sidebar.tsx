@@ -16,7 +16,7 @@ export const SideBar: FC<{ collapsed: boolean }> = ({ collapsed }) => {
 
   const onMenuClick: MenuProps['onClick'] = (e) => {
     if (e.key) {
-      navigate(routePaths.projectsDetails.replace(':id', e.key));
+      navigate(routePaths.projectsEdit.replace(':id', e.key));
     }
   };
 

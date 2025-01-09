@@ -3,6 +3,7 @@ import { routePaths } from '../constants/paths';
 import { Projects } from '../pages/projects';
 import { ProjectEdit } from '../pages/projects/edit';
 import { ProjectCreate } from '../pages/projects/create';
+import { ProjectDetails } from '../pages/projects/details';
 
 export const publicRoutes: TRoute[] = [
   {
@@ -24,9 +25,15 @@ export const publicRoutes: TRoute[] = [
     exact: true,
   },
   {
+    name: 'Project Edit',
+    path: routePaths.projectsEdit,
+    component: ProjectEdit,
+    exact: true,
+  },
+  {
     name: 'Project Details',
     path: routePaths.projectsDetails,
-    component: ProjectEdit,
+    component: ProjectDetails,
     exact: true,
   },
 ];
