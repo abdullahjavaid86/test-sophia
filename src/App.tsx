@@ -6,6 +6,7 @@ import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { AppRoutes } from './routes/routes';
 import Content from './layouts/content';
 import { useThemeChooser } from './contexts/theme-chooser';
+import ErrorBoundary from './ErrorBoundaries/global-error-boundary';
 
 export const GlobalStyles = createGlobalStyle`
   body {
@@ -28,9 +29,11 @@ function App() {
     <ThemeProvider theme={themeConfig}>
       <ModalProvider backgroundComponent={FadingBackground}>
         <GlobalStyles />
-        <Content>
-          <AppRoutes />
-        </Content>
+        <ErrorBoundary>
+          <Content>
+            <AppRoutes />
+          </Content>
+        </ErrorBoundary>
       </ModalProvider>
     </ThemeProvider>
   );

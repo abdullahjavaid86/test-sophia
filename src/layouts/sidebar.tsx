@@ -40,7 +40,7 @@ export const SideBar: FC<{ collapsed: boolean }> = ({ collapsed }) => {
   return (
     <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
       <div className="p-5 text-lg text-center text-dark">LOGO</div>
-      <Menu theme="light" mode="inline" defaultSelectedKeys={[routePaths.home]} items={menu} />
+      <Menu theme="light" mode="inline" defaultSelectedKeys={[routePaths.projects]} items={menu} openKeys={[routePaths.projects]}/>
     </Sider>
   );
 };

@@ -7,7 +7,7 @@ import { routePaths } from '../../constants/paths';
 import { useQuery } from '@tanstack/react-query';
 import { getAllProjects } from '../../services/projects';
 import { useProjectStore } from '../../store/project';
-import { StyledAntDButton } from '../../components/styled/StyledButton';
+import { StyledAntDButton } from '../../components/styled/styled-button';
 import styled from 'styled-components';
 import { StarFilled } from '@ant-design/icons';
 
